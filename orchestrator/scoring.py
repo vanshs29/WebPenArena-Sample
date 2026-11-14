@@ -1,0 +1,212 @@
+"""
+Scoring/discovery/aggregation logic for benchmark mode.
+
+Kept free of any CLI (questionary/print) calls — every function here returns plain
+data (dicts/lists) so orchestrator.py's menu actions do all the rendering. See
+BENCHMARK_MODE_PLAN.md "Future direction" for why: this makes it straightforward to
+put an HTTP API in front of this logic later without rewriting it.
+"""
+
+import json
+import re
+import subprocess
+
+try:
+    import requests
+except ImportError:
+    requests = None
+
+METRICS = ["exploration", "reconnaissance", "vulnerability_detection", "exploitation"]
+DIFFICULTIES = ["easy", "medium", "hard"]
+
+_CONTAINER_NAME_RE = re.compile(r"^benchmark-(?P<id>.+)-[0-9a-f]{8}$")
+_HOST_PORT_RE = re.compile(r":(\d+)->")
+
+
+def difficulty_of(app_id: str) -> str:
+    """Registry ids are suffixed with their design-time difficulty tier
+    (`sqli-easy`, `sqli-medium`) — see CLAUDE.md's Difficulty Scoring Methodology for
+    why this label is provisional (a one-time tercile reclassification happens once
+    the full 50-app corpus is built) rather than a permanent per-app field."""
+    for tier in DIFFICULTIES:
+        if app_id.endswith(f"-{tier}"):
+            return tier
+    return "other"
+
+
+def _container_env(name: str) -> list[str]:
+    result = subprocess.run(
+        ["docker", "inspect", name, "--format", "{{json .Config.Env}}"],
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        return []
+    try:
+        return json.loads(result.stdout.strip())
+    except json.JSONDecodeError:
+        return []
+
+
+def discover_running_apps(apps: list[dict]) -> list[dict]:
+    """Match live `benchmark-*` containers back to registry apps, recovering each
+    container's host port and SCORE_TOKEN (works even for containers launched in a
+    previous orchestrator run, since nothing is persisted to disk)."""
+    from orchestrator import get_running_containers
+
+    apps_by_id = {a["id"]: a for a in apps}
+    rows = []
+
+    for row in get_running_containers():
+        name = row["name"]
+        match = _CONTAINER_NAME_RE.match(name)
+        if not match:
+            continue
+        app = apps_by_id.get(match.group("id"))
+        if app is None:
+            continue
+
+        port_match = _HOST_PORT_RE.search(row["ports"])
+        host_port = int(port_match.group(1)) if port_match else None
+
+        token = None
+        for entry in _container_env(name):
+            if entry.startswith("SCORE_TOKEN="):
+                token = entry.split("=", 1)[1]
+                break
+
+        rows.append({
+            "app": app,
+            "container_name": name,
+            "host_port": host_port,
+            "token": token,
+            "status": row["status"],
+        })
+
+    return rows
+
+
+def fetch_score(host_port: int, token: str, timeout: float = 3) -> dict | None:
+    """GET /score/<token>?format=json. Returns None on any connection error, timeout,
+    or non-200 — callers must treat that as "not ready yet," not a crash, since no app
+    has a Docker HEALTHCHECK."""
+    if requests is None or host_port is None or token is None:
+        return None
+    try:
+        resp = requests.get(
+            f"http://localhost:{host_port}/score/{token}",
+            params={"format": "json"},
+            timeout=timeout,
+        )
+    except requests.RequestException:
+        return None
+    if resp.status_code != 200:
+        return None
+    try:
+        return resp.json()
+    except ValueError:
+        return None
+
+
+def reset_score(host_port: int, token: str, timeout: float = 3) -> bool:
+    if requests is None or host_port is None or token is None:
+        return False
+    try:
+        resp = requests.post(
+            f"http://localhost:{host_port}/score/{token}/reset",
+            timeout=timeout,
+        )
+    except requests.RequestException:
+        return False
+    return resp.status_code == 200
+
+
+def category_max(score: dict, metric: str) -> float:
+    """Apps retrofitted to the weighted-subtask model (see SCORING_REWORK_PLAN.md)
+    declare their own per-category ceiling in `max_score`. Apps not yet retrofitted
+    omit the field entirely and stay on the old [0, 1] fractional scale, so 1.0 is the
+    correct default rather than a placeholder."""
+    return score.get("max_score", {}).get(metric, 1.0)
+
+
+def build_entries(apps: list[dict]) -> list[dict]:
+    """One entry per registered app, running or not, each carrying its own fetched
+    score (or None). Shared by dashboard.py's live scoreboard and report.py's
+    snapshot generator so the two never compute this differently."""
+    running = {row["app"]["id"]: row for row in discover_running_apps(apps)}
+
+    entries = []
+    for reg_app in apps:
+        difficulty = difficulty_of(reg_app["id"])
+        row = running.get(reg_app["id"])
+        if row is None:
+            entries.append({
+                "id": reg_app["id"],
+                "name": reg_app["name"],
+                "description": reg_app["description"],
+                "difficulty": difficulty,
+                "container_name": None,
+                "host_port": None,
+                "status": None,
+                "running": False,
+                "score": None,
+                "score_url": None,
+            })
+            continue
+
+        score = fetch_score(row["host_port"], row["token"])
+        entries.append({
+            "id": reg_app["id"],
+            "name": reg_app["name"],
+            "description": reg_app["description"],
+            "difficulty": difficulty,
+            "container_name": row["container_name"],
+            "host_port": row["host_port"],
+            "status": row["status"],
+            "running": True,
+            "score": score,
+            "score_url": f"http://localhost:{row['host_port']}/score/{row['token']}",
+        })
+
+    return entries
+
+
+def aggregate_by_difficulty(entries: list[dict]) -> dict:
+    """Splits build_entries() output into per-tier totals, same shape as
+    aggregate_scores()'s "totals" but scoped to one difficulty tier at a time."""
+    totals_by_difficulty = {}
+    for tier in DIFFICULTIES:
+        tier_entries = [e for e in entries if e["difficulty"] == tier]
+        tier_agg = aggregate_scores(
+            [{"app": e, "score": e["score"]} for e in tier_entries if e["running"]]
+        )
+        totals_by_difficulty[tier] = {
+            "totals": tier_agg["totals"],
+            "n_total": len(tier_entries),
+            "n_responded": tier_agg["n_responded"],
+        }
+    return totals_by_difficulty
+
+
+def aggregate_scores(rows: list[dict]) -> dict:
+    """`rows` is discover_running_apps() output, each optionally carrying a "score" key
+    (the fetch_score() result, or None if that app didn't respond this tick).
+
+    Returns raw achieved/max point sums per category, not a formatted string or a
+    percentage — consistent with the corpus-wide raw, unnormalized HTB-style scoring
+    model (see root CLAUDE.md's Scoring Framework). Achieved and max are each summed
+    directly across responded apps (no per-app averaging), reading each app's own
+    declared max (falling back to 1.0 for apps not yet retrofitted to the weighted
+    model). Formatting (points vs. percent) is left to the caller/frontend."""
+    responded = [r for r in rows if r.get("score") is not None]
+    totals = {}
+    for metric in METRICS:
+        achieved = sum(r["score"]["scores"].get(metric, 0.0) for r in responded)
+        max_total = sum(category_max(r["score"], metric) for r in responded)
+        totals[metric] = {"achieved": achieved, "max": max_total}
+    return {
+        "totals": totals,
+        "n_total": len(rows),
+        "n_responded": len(responded),
+        "rows": rows,
+    }

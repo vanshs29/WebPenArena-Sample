@@ -1,0 +1,4 @@
+*_test.go
+scripts/
+*.md
+.git/

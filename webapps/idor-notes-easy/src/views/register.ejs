@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>LocketBox - Create account</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">LocketBox</div>
+  </header>
+  <main>
+    <div class="panel">
+      <h1>Create your account</h1>
+      <% if (error) { %>
+        <div class="error-banner"><%= error %></div>
+      <% } %>
+      <form method="post" action="/register">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" autocomplete="username" required />
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" autocomplete="new-password" required />
+        <button type="submit" class="primary">Create account</button>
+      </form>
+      <p class="auth-switch">Already have an account? <a href="/login">Sign in</a></p>
+    </div>
+  </main>
+</body>
+</html>

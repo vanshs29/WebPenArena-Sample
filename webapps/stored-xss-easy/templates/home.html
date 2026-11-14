@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>ReviewRing — Boutique Marketplace</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <h1>ReviewRing</h1>
+    <p class="tagline">Small-batch goods, reviewed by real customers.</p>
+  </header>
+
+  <main class="catalog">
+    {{range .Products}}
+    <article class="product-card">
+      <h2><a href="/products/{{.ID}}">{{.Name}}</a></h2>
+      <p class="description">{{.Description}}</p>
+      <p class="price">${{.PriceDisplay}}</p>
+    </article>
+    {{end}}
+  </main>
+
+  <footer class="site-footer">
+    <p>ReviewRing is a demo marketplace built for security research.</p>
+  </footer>
+</body>
+</html>

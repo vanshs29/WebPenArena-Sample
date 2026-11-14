@@ -1,0 +1,142 @@
+:root {
+  --rr-ink: #2b2420;
+  --rr-paper: #faf6f0;
+  --rr-accent: #a9542f;
+  --rr-border: #e3d9cc;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  background: var(--rr-paper);
+  color: var(--rr-ink);
+}
+
+.site-header {
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--rr-border);
+  background: #fff;
+}
+
+.site-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.site-header h1 a {
+  color: var(--rr-ink);
+  text-decoration: none;
+}
+
+.tagline {
+  margin: 0.25rem 0 0;
+  color: #6b6258;
+}
+
+.catalog {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  padding: 2rem;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.product-card {
+  background: #fff;
+  border: 1px solid var(--rr-border);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.product-card h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.product-card a {
+  color: var(--rr-accent);
+  text-decoration: none;
+}
+
+.description {
+  color: #4a4238;
+  font-size: 0.95rem;
+}
+
+.price {
+  font-weight: 600;
+}
+
+.product-detail {
+  max-width: 720px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+.reviews {
+  margin-top: 2rem;
+}
+
+.review {
+  border-top: 1px solid var(--rr-border);
+  padding: 0.75rem 0;
+}
+
+.review-author {
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+}
+
+.review-body {
+  margin: 0;
+}
+
+.review-form {
+  margin-top: 2rem;
+  padding: 1.25rem;
+  background: #fff;
+  border: 1px solid var(--rr-border);
+  border-radius: 8px;
+}
+
+.review-form label {
+  display: block;
+  margin-top: 0.75rem;
+  font-weight: 600;
+}
+
+.review-form input,
+.review-form textarea {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.25rem;
+  border: 1px solid var(--rr-border);
+  border-radius: 6px;
+  font-family: inherit;
+}
+
+.review-form button {
+  margin-top: 1rem;
+  background: var(--rr-accent);
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.empty-state {
+  color: #6b6258;
+}
+
+.site-footer {
+  padding: 1.5rem 2rem;
+  color: #6b6258;
+  font-size: 0.85rem;
+  text-align: center;
+}

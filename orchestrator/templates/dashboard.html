@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Benchmark Scoreboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-title">
+      <h1>Benchmark Scoreboard</h1>
+      <span class="status-badge" id="status-badge">–</span>
+    </div>
+    <div class="actions">
+      <button id="btn-toggle-percent" class="btn btn-outline">Show %</button>
+      <button id="btn-launch-all" class="btn btn-primary">Launch all</button>
+      <button id="btn-rebuild-all" class="btn btn-outline">Rebuild all</button>
+      <button id="btn-reset-all" class="btn btn-warn">Reset all</button>
+      <button id="btn-ports" class="btn btn-outline">Show ports</button>
+      <button id="btn-report" class="btn btn-outline">Generate report</button>
+      <button id="btn-stop-all" class="btn btn-danger">Stop all</button>
+    </div>
+  </header>
+
+  <div class="report-panel" id="ports-panel" hidden>
+    <div class="report-panel-header">
+      <h2>Running app ports</h2>
+      <button class="btn btn-small btn-ghost" id="btn-close-ports">Close</button>
+    </div>
+    <pre class="report-panel-markdown" id="ports-panel-list"></pre>
+  </div>
+
+  <div class="report-panel" id="report-panel" hidden>
+    <div class="report-panel-header">
+      <h2>Report generated</h2>
+      <button class="btn btn-small btn-ghost" id="btn-close-report">Close</button>
+    </div>
+    <p class="report-panel-paths" id="report-panel-paths"></p>
+    <pre class="report-panel-markdown" id="report-panel-markdown"></pre>
+  </div>
+
+  <section class="build-errors" id="build-errors" hidden aria-label="Build errors">
+    <div class="build-errors-header">
+      <h2>Build errors</h2>
+      <button class="btn btn-small btn-ghost" id="btn-clear-errors">Clear</button>
+    </div>
+    <ul class="build-errors-list" id="build-errors-list"></ul>
+  </section>
+
+  <div class="totals-block">
+    <h2 class="totals-heading">All tiers</h2>
+    <section class="totals" id="totals-all" aria-label="Aggregate scores across all tiers"></section>
+  </div>
+
+  <nav class="tabs" id="tier-tabs" role="tablist" aria-label="Difficulty tiers">
+    <button class="tab" data-tier="easy" role="tab" aria-selected="true">Easy <span class="tab-count"></span></button>
+    <button class="tab" data-tier="medium" role="tab" aria-selected="false">Medium <span class="tab-count"></span></button>
+    <button class="tab" data-tier="hard" role="tab" aria-selected="false">Hard <span class="tab-count"></span></button>
+  </nav>
+
+  <div class="totals-block">
+    <div class="totals-block-header">
+      <h2 class="totals-heading" id="totals-tier-heading">Easy</h2>
+      <button class="btn btn-small btn-primary" id="btn-launch-tier">Launch Easy apps</button>
+    </div>
+    <section class="totals" id="totals" aria-label="Aggregate scores for the selected tier"></section>
+  </div>
+
+  <main class="app-grid" id="app-grid" aria-label="App scores"></main>
+  <p class="empty-state" id="empty-tier" hidden>No apps in this tier yet.</p>
+
+  <template id="tpl-app-card">
+    <article class="app-card">
+      <div class="app-card-header">
+        <div>
+          <h2 class="app-name"></h2>
+          <p class="app-desc"></p>
+          <p class="app-port"></p>
+        </div>
+        <span class="status-pill"></span>
+      </div>
+      <div class="meters"></div>
+      <div class="app-card-footer">
+        <a class="btn btn-small btn-outline btn-scoreboard" target="_blank" rel="noopener">Scoreboard ↗</a>
+        <button class="btn btn-small btn-primary btn-launch">Launch</button>
+        <button class="btn btn-small btn-outline btn-reset">Reset</button>
+        <button class="btn btn-small btn-outline btn-stop">Stop</button>
+        <div class="footer-secondary">
+          <button class="btn btn-small btn-ghost btn-rebuild" title="Rebuild this app's image">⟳</button>
+          <button class="btn btn-small btn-ghost btn-events">Events <span class="event-count"></span> <span class="chev">▾</span></button>
+        </div>
+      </div>
+      <ul class="events-list"></ul>
+    </article>
+  </template>
+
+  <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>

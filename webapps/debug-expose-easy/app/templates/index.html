@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>PulseBoard Status</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <h1>PulseBoard</h1>
+    <a class="nav-link" href="{{ url_for('public.login') }}">Team sign in</a>
+  </header>
+  <main class="status-page">
+    <p class="subtitle">Live status for the services PulseBoard watches.</p>
+    <ul class="status-list">
+      {% for service in services %}
+      <li class="status-row">
+        <span class="status-dot status-{{ service.status }}"></span>
+        <span class="status-name">{{ service.name }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+  </main>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{.Product.Name}} — ReviewRing</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <h1><a href="/">ReviewRing</a></h1>
+  </header>
+
+  <main class="product-detail">
+    <h2>{{.Product.Name}}</h2>
+    <p class="description">{{.Product.Description}}</p>
+    <p class="price">${{.Product.PriceDisplay}}</p>
+
+    <section class="reviews">
+      <h3>Customer Reviews</h3>
+      {{range .Reviews}}
+      <article class="review">
+        <p class="review-author">{{.Name}}</p>
+        <div class="review-body">{{.Comment}}</div>
+      </article>
+      {{else}}
+      <p class="empty-state">No reviews yet. Be the first to leave one.</p>
+      {{end}}
+    </section>
+
+    <section class="review-form">
+      <h3>Leave a Review</h3>
+      <form method="post" action="/products/{{.Product.ID}}/reviews">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="comment">Comment</label>
+        <textarea id="comment" name="comment" rows="4" required></textarea>
+
+        <button type="submit">Submit Review</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>ReviewRing is a demo marketplace built for security research.</p>
+  </footer>
+</body>
+</html>

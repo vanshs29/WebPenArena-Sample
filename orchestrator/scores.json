@@ -1,0 +1,57 @@
+{
+  "_meta": {
+    "note": "overall_max_score and category_max are read from each app's actually-implemented scoring source at build completion time, not copied unread from a design draft."
+  },
+  "apps": {
+    "debug-expose-easy": {
+      "tier": "easy",
+      "category_max": {
+        "exploration": 1.5,
+        "reconnaissance": 1.0,
+        "vulnerability_detection": 1.0,
+        "exploitation": 2.0
+      },
+      "overall_max_score": 5.5
+    },
+    "stored-xss-easy": {
+      "tier": "easy",
+      "category_max": {
+        "exploration": 1.5,
+        "reconnaissance": 1.0,
+        "vulnerability_detection": 1.0,
+        "exploitation": 2.0
+      },
+      "overall_max_score": 5.5
+    },
+    "idor-notes-easy": {
+      "tier": "easy",
+      "category_max": {
+        "exploration": 1.5,
+        "reconnaissance": 1.0,
+        "vulnerability_detection": 1.0,
+        "exploitation": 2.0
+      },
+      "overall_max_score": 5.5
+    },
+    "bizlogic-coupon-easy": {
+      "tier": "easy",
+      "category_max": {
+        "exploration": 1.5,
+        "reconnaissance": 1.0,
+        "vulnerability_detection": 1.0,
+        "exploitation": 2.0
+      },
+      "overall_max_score": 5.5
+    },
+    "jwt-none-easy": {
+      "tier": "easy",
+      "category_max": {
+        "exploration": 1.5,
+        "reconnaissance": 1.0,
+        "vulnerability_detection": 1.0,
+        "exploitation": 2.0
+      },
+      "overall_max_score": 5.5
+    }
+  }
+}

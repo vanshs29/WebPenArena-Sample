@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>PulseBoard - Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <h1>PulseBoard</h1>
+    <nav>
+      <span class="nav-user">Signed in as {{ username }}</span>
+      <a class="nav-link" href="{{ url_for('public.logout') }}">Sign out</a>
+    </nav>
+  </header>
+  <main class="dashboard">
+    <h2>Service detail</h2>
+    <table class="detail-table">
+      <thead><tr><th>Service</th><th>Status</th><th>Notes</th></tr></thead>
+      <tbody>
+        {% for service in services %}
+        <tr>
+          <td>{{ service.name }}</td>
+          <td class="status-cell status-{{ service.status }}">{{ service.status }}</td>
+          <td>{{ "Operating normally" if service.status == "green" else "Investigating elevated latency" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+</body>
+</html>

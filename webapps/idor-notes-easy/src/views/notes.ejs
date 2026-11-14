@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>LocketBox - My notes</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">LocketBox</div>
+    <form method="post" action="/logout">
+      <button type="submit">Sign out</button>
+    </form>
+  </header>
+  <main>
+    <div class="panel">
+      <h1>New note</h1>
+      <form method="post" action="/api/notes">
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title" required />
+        <label for="content">Content</label>
+        <textarea id="content" name="content" required></textarea>
+        <button type="submit" class="primary">Save note</button>
+      </form>
+    </div>
+    <div class="panel">
+      <h2>My notes</h2>
+      <% if (notes.length === 0) { %>
+        <p class="empty-state">No notes yet. Save one above.</p>
+      <% } else { %>
+        <% notes.forEach(function(note) { %>
+          <div class="note-card">
+            <h3><%= note.title %></h3>
+            <p><%= note.content %></p>
+            <div class="note-meta">Note #<%= note.id %></div>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+  </main>
+</body>
+</html>

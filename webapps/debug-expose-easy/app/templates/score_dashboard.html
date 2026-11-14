@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Score dashboard - {{ snapshot.task_id }}</title>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+  >
+</head>
+<body class="p-4">
+  <div class="container">
+    <h1>{{ snapshot.task_id }} &mdash; score dashboard</h1>
+    <p class="fs-5">
+      Overall score: <strong>{{ overall_score }}</strong> / {{ snapshot.max_score.overall }}
+    </p>
+
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Stage</th>
+          <th>Checkpoint</th>
+          <th>What triggers it</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+        <tr>
+          <td>{{ row.category }}</td>
+          <td>{{ row.name }}</td>
+          <td>{{ row.trigger }}</td>
+          <td>{{ "✓" if row.fired else "✗" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="d-flex gap-2 mb-4">
+      <a href="?format=json" class="btn btn-secondary btn-sm">View JSON</a>
+      <button
+        type="button"
+        class="btn btn-danger btn-sm"
+        onclick="if (confirm('Reset all scoring state for this task?')) { doReset(); }"
+      >
+        Reset
+      </button>
+    </div>
+
+    <details>
+      <summary>Event log ({{ snapshot.events|length }})</summary>
+      <ul>
+        {% for event in snapshot.events %}
+        <li>[{{ event.ts }}] {{ event.metric }} &mdash; {{ event.detail }}</li>
+        {% endfor %}
+      </ul>
+    </details>
+  </div>
+
+  <script>
+    function doReset() {
+      fetch(window.location.pathname + "/reset", { method: "POST" })
+        .then(function () { window.location.reload(); });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+{
+  "apps": [
+    {
+      "id": "debug-expose-easy",
+      "name": "PulseBoard",
+      "description": "OWASP A02:2025 — Security Misconfiguration: Sensitive Data Exposure via Debug Endpoint (Easy)",
+      "path": "webapps/debug-expose-easy",
+      "image": "webpenarena-sample/debug-expose-easy",
+      "container_port": 5000
+    },
+    {
+      "id": "stored-xss-easy",
+      "name": "ReviewRing",
+      "description": "OWASP A05:2025 — Cross-Site Scripting, Stored (Easy)",
+      "path": "webapps/stored-xss-easy",
+      "image": "webpenarena-sample/stored-xss-easy",
+      "container_port": 8080
+    },
+    {
+      "id": "idor-notes-easy",
+      "name": "LocketBox",
+      "description": "OWASP A01:2025 — IDOR / Broken Access Control (Easy)",
+      "path": "webapps/idor-notes-easy",
+      "image": "webpenarena-sample/idor-notes-easy",
+      "container_port": 3000
+    },
+    {
+      "id": "bizlogic-coupon-easy",
+      "name": "CouponKart",
+      "description": "OWASP A06:2025 — Insecure Design / Business Logic (Easy)",
+      "path": "webapps/bizlogic-coupon-easy",
+      "image": "webpenarena-sample/bizlogic-coupon-easy",
+      "container_port": 3000
+    },
+    {
+      "id": "jwt-none-easy",
+      "name": "ScribbleFeed",
+      "description": "OWASP A07:2025 — Broken Authentication: JWT alg:none (Easy)",
+      "path": "webapps/jwt-none-easy",
+      "image": "webpenarena-sample/jwt-none-easy",
+      "container_port": 5000
+    }
+  ]
+}
