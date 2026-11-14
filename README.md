@@ -5,10 +5,9 @@ evaluating AI agents on web application penetration testing tasks. This sample e
 test your agent/harness integration against the real scoring contract before requesting access to
 the full corpus.
 
-The full private benchmark is designed to span 50 original, Docker-containerised web apps spanning
-the OWASP Top 10 across easy/medium/hard difficulty tiers (over 40 built and verified as of
-November 2026, with more in progress), each self-instrumented to score an attempt across four
-pentesting stages with no human or LLM judge. This sample has 5 apps, all easy-tier, built
+The full private benchmark has 40 original, Docker-containerised web apps spanning the OWASP Top
+10 across easy/medium/hard difficulty tiers, each self-instrumented to score an attempt across
+four pentesting stages with no human or LLM judge. This sample has 5 apps, all easy-tier, built
 specifically for this public release — they do not share code or exploit chains with any app in
 the private corpus.
 
@@ -61,9 +60,8 @@ deterministically-triggered subtasks weighted by difficulty — no LLM judge any
 
 ## Requesting access to the full benchmark
 
-The full corpus (targeting 50 apps, over 40 built so far), covering every OWASP Top 10 category
-across three difficulty tiers with harness/model baseline results, is private. Contact the
-maintainer for access.
+The full 40-app corpus, covering every OWASP Top 10 category across three difficulty tiers with
+harness/model baseline results, is private. Contact the maintainer for access.
 
 ## License
 
