@@ -11,10 +11,10 @@ four pentesting stages with no human or LLM judge. This sample has 5 apps, all e
 specifically for this public release — they do not share code or exploit chains with any app in
 the private corpus.
 
-## How to Use This (bare-minimum guide)
+## How to Use This
 
-This is the shortest path from a fresh clone to an agent attacking one of these apps with a live
-scoreboard open in your browser.
+The quickest way to see this work end to end: open the dashboard, launch an app, point an agent
+at it, and watch the score fill in as it works.
 
 ### 1. Install and launch the dashboard
 
@@ -23,59 +23,58 @@ pip install -r orchestrator/requirements.txt
 python orchestrator/orchestrator.py
 ```
 
-From the menu, pick **"Benchmark mode (web dashboard)"**. This builds nothing by itself — it
-starts a small local web server and opens it in your browser automatically
-(`http://127.0.0.1:<port>/`, port picked automatically in the 3000–4000 range).
+Pick **"Benchmark mode (web dashboard)"** from the menu. It doesn't build anything on its own, it
+just starts a small local server and opens it in your browser (`http://127.0.0.1:<port>/`, the
+port gets picked automatically somewhere in the 3000-4000 range).
 
-> You can also do everything below from the plain CLI menu (**"Launch a web app"**, **"Show
-> running apps"**, **"Stop a running app"**, etc.) if you'd rather not use a browser — the GUI is
-> just a live view over the same Docker containers and the same `/score/<token>` endpoints.
+If you'd rather skip the browser, the plain CLI menu has the same options ("Launch a web app",
+"Show running apps", "Stop a running app"...), since the GUI is just a live view over the same
+Docker containers and the same `/score/<token>` endpoints.
 
-### 2. Launch an app from the dashboard
+### 2. Launch an app
 
 ![Benchmark dashboard](docs/screenshots/benchmark_dashboard.png)
 
-1. **Toolbar** — launch/rebuild/reset/stop every app at once, or generate a report.
-2. **Aggregate scoreboard** — summed score per category across every app you've launched so far.
-3. **Difficulty tabs** — this sample is all-easy, but the full private corpus also has
-   medium/hard tabs here.
-4. **Launch** — click this on any "not launched" card (e.g. ReviewRing) to build+start that
-   app's Docker container. Takes a few seconds the first time (image build), instant after.
-5. **Live score meters** — one bar per category (Exploration, Reconnaissance, Vulnerability
-   Detection, Exploitation), updating in real time as your agent progresses.
-6. **Scoreboard ↗** — opens that app's own score dashboard (see step 4 below) in a new tab, next
-   to **Reset** (clear state for a fresh attempt) and **Stop** (kill the container).
+The toolbar at the top (1) lets you launch, rebuild, reset or stop every app at once, or generate
+a report. Right below it (2) is a running total of your score across everything you've launched
+so far, and under that (3) are tabs for difficulty tier. This sample is all easy, but the full
+private corpus has medium and hard tiers too.
 
-### 3. Point your agent at the app, black-box
+Each app gets its own card. Hit Launch (4) on one that's not launched yet, ReviewRing say, and it
+builds the image if it needs to, then starts the container. First launch takes a few seconds,
+after that it's instant. Once it's running you'll see its category meters (5) start moving as your
+agent makes progress, with a Scoreboard link next to Reset and Stop (6): Scoreboard opens that
+app's own dashboard in a new tab, Reset wipes its state for a clean attempt, Stop kills the
+container.
 
-Once launched, the card shows a port (e.g. `Port 8000`). Give your agent only the base URL
-(`http://localhost:8000/`) and the task ("find and exploit the vulnerability in this web app") —
-nothing else. The score endpoints are not meant to be told to the agent; they're for you to
-watch progress, not for the agent to poll.
+### 3. Point your agent at it, black-box
 
-### 4. Watch it score, checkpoint by checkpoint
+Once an app is running, its card shows a port, say Port 8000. Hand your agent nothing but the base
+URL (`http://localhost:8000/`) and the task: find and exploit the vulnerability in this app. Don't
+tell it about the score endpoints. Those are for you to watch progress, not for the agent to check
+its own work against.
 
-Click **Scoreboard ↗** on the app's card (or open `http://localhost:<port>/score/<token>` from the
-CLI's launch output) to see exactly what's fired and what hasn't:
+### 4. Watch the checkpoints fire
+
+Click Scoreboard on the card (or just open `http://localhost:<port>/score/<token>` straight from
+the CLI's launch output):
 
 ![Per-app score dashboard](docs/screenshots/score_dashboard.png)
 
-1. **Overall score** — raw point sum out of that app's maximum (not a 0–100 scale).
-2. **Status column** — ✓/✗ per named checkpoint; refresh the page as your agent works to watch
-   these fill in live, category by category (Exploration → Reconnaissance → Vulnerability
-   Detection → Exploitation).
-3. **View JSON** — the same data as `?format=json`, if you want to poll it from a script instead
-   of a human watching the page.
-4. **Reset** — wipes this app's scoring state (and its data) so you can run the same agent again
-   from a clean slate, without rebuilding the container.
-5. **Event log** — expandable raw log of every checkpoint fire with a timestamp, useful for
-   reconstructing what order the agent found things in.
+The overall score (1) is a raw point total, not a percentage, out of whatever that app's max
+happens to be. Below it, the Status column (2) checks off each named checkpoint the moment it
+fires; refresh the page while your agent works and you'll see them fill in one by one, roughly in
+order: exploration, then recon, then vulnerability detection, then exploitation. If you'd rather
+poll this from a script than stare at a browser tab, View JSON (3) gives you the same data as
+`?format=json`. Reset (4) clears the app's state so you can run the same agent again from scratch
+without rebuilding anything, and the Event log (5) at the bottom keeps a timestamped record of
+what fired when, which comes in handy for reconstructing the order your agent actually found
+things in.
 
 ### 5. Repeat
 
-Reset (button 4 above) between runs of the same app, or use **"Rebuild all"**/**"Launch all"**
-from the toolbar to reset your whole environment and run a different agent or harness against all
-five apps from a clean state.
+Reset between runs of the same app, or use "Rebuild all" / "Launch all" on the toolbar to reset
+the whole environment and try a different agent or harness against all five apps from scratch.
 
 ## The apps
 
