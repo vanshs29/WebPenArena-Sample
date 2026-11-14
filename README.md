@@ -35,17 +35,16 @@ Docker containers and the same `/score/<token>` endpoints.
 
 ![Benchmark dashboard](docs/screenshots/benchmark_dashboard.png)
 
-The toolbar at the top (1) lets you launch, rebuild, reset or stop every app at once, or generate
-a report. Right below it (2) is a running total of your score across everything you've launched
-so far, and under that (3) are tabs for difficulty tier. This sample is all easy, but the full
-private corpus has medium and hard tiers too.
-
-Each app gets its own card. Hit Launch (4) on one that's not launched yet, ReviewRing say, and it
-builds the image if it needs to, then starts the container. First launch takes a few seconds,
-after that it's instant. Once it's running you'll see its category meters (5) start moving as your
-agent makes progress, with a Scoreboard link next to Reset and Stop (6): Scoreboard opens that
-app's own dashboard in a new tab, Reset wipes its state for a clean attempt, Stop kills the
-container.
+1. Toolbar: launch, rebuild, reset or stop every app at once, or generate a report.
+2. Running total of your score across everything you've launched so far.
+3. Tabs for difficulty tier. This sample is all easy, but the full private corpus has medium and
+   hard tiers too.
+4. Launch button: click it on a card that isn't launched yet, ReviewRing say, and it builds the
+   image if it needs to, then starts the container. First launch takes a few seconds, after that
+   it's instant.
+5. Category meters: these start moving as your agent makes progress once the app is running.
+6. Scoreboard, Reset and Stop: Scoreboard opens that app's own dashboard in a new tab, Reset wipes
+   its state for a clean attempt, Stop kills the container.
 
 ### 3. Point your agent at it, black-box
 
@@ -61,15 +60,17 @@ the CLI's launch output):
 
 ![Per-app score dashboard](docs/screenshots/score_dashboard.png)
 
-The overall score (1) is a raw point total, not a percentage, out of whatever that app's max
-happens to be. Below it, the Status column (2) checks off each named checkpoint the moment it
-fires; refresh the page while your agent works and you'll see them fill in one by one, roughly in
-order: exploration, then recon, then vulnerability detection, then exploitation. If you'd rather
-poll this from a script than stare at a browser tab, View JSON (3) gives you the same data as
-`?format=json`. Reset (4) clears the app's state so you can run the same agent again from scratch
-without rebuilding anything, and the Event log (5) at the bottom keeps a timestamped record of
-what fired when, which comes in handy for reconstructing the order your agent actually found
-things in.
+1. Overall score: a raw point total, not a percentage, out of whatever that app's max happens to
+   be.
+2. Status column: checks off each named checkpoint the moment it fires. Refresh the page while
+   your agent works and you'll see them fill in one by one, roughly in order: exploration, then
+   recon, then vulnerability detection, then exploitation.
+3. View JSON: the same data as `?format=json`, for when you'd rather poll this from a script than
+   stare at a browser tab.
+4. Reset: clears the app's state so you can run the same agent again from scratch without
+   rebuilding anything.
+5. Event log: a timestamped record of what fired when, handy for reconstructing the order your
+   agent actually found things in.
 
 ### 5. Repeat
 
