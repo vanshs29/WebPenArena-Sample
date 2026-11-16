@@ -4,10 +4,7 @@ A set of containerised, intentionally vulnerable web apps for testing whether AI
 
 ## Why this benchmark
 
-Existing web-app pentesting benchmarks (e.g. AutoPT, CVE-Bench) score agents on binary
-task completion: either the agent fully compromised the target or it didn't. That can't
-distinguish an agent that found the vulnerability but failed to exploit it from an agent
-that found nothing at all.
+Existing web-app pentesting benchmarks score agents on binary task completion: either the agent fully compromised the target or it didn't. That can't distinguish an agent that found the vulnerability but failed to exploit it from an agent that found nothing at all.
 
 WebPenArena instead scores every attempt against four independent metrics, tracked
 without a human or LLM judge:
@@ -17,21 +14,20 @@ without a human or LLM judge:
 - **Vulnerability Detection** — whether the agent identified the target vulnerability
 - **Exploitation** — whether the agent successfully executed the attack
 
-Each app watches its own traffic for named checkpoints, like a login form being hit or a
-payload matching a known trigger, and logs the ones that fire. You can watch it happen on
-a dashboard at `GET /score/<token>`, or pull the same data as JSON for a script.
+Each app monitors its own traffic for specific events, such as someone accessing a login form or sending a payload that matches a known trigger, and records whenever one of these events occurs. You can view the results in real time through the dashboard at GET /score/<token> or retrieve the same data in JSON format for use in scripts.
 
 ## Requesting access to the full benchmark
 
-This repo has 5 sample apps so you can try the benchmark setup before asking for more. The full private corpus is 40 original apps spanning the OWASP Top 10 across easy, medium and hard tiers, kept private so it doesn't end up in LLM training data. Want access? Reach out to [email].
+This repository includes five sample apps to help you try out the benchmark setup before requesting access to the full dataset. The complete private corpus contains 40 original applications covering the OWASP Top 10, with easy, medium, and hard difficulty levels. We keep the full corpus private to prevent it from being exposed to LLM training data and potentially compromising future evaluations. 
+
+For access to the full dataset, please contact us at [email].
 
 
 [Setup Instructions](#setup-instructions) | [Extended Results](#extended-results)
 
 ## Setup Instructions
 
-The quickest way to see this work end to end: open the dashboard, launch an app, point an agent
-at it, and watch the score fill in as it works.
+The quickest way to see this work end to end: open the dashboard, launch an app, point an agent at it, and watch the score fill in as it works.
 
 ### 1. Install and launch the dashboard
 
