@@ -38,3 +38,39 @@ The label-level means below are unweighted averages of the apps carrying each la
 - **A07** (Parley) has a low ceiling across all systems at 30.1–38.2%; GLM is narrowly best, while Kimi is tied with Opus. **A01+A02** (Millbrook) instead favors Kimi at 44.7%, with the other systems between 20.1% and 30.2%, although the wide spreads for GPT-5.5, GLM, and Qwen make this result less stable.
 
 Overall, GLM 5.3 is best on the A06+A10 exceptional-condition workflow, Kimi is strongest on the recurring A01 access-control cases, and Qwen is competitive on the A01+A05 and A06+A10 chains but less predictable. A07 and the A01+A08 combination remain broadly difficult regardless of model or harness.
+
+
+
+# Cross Harness-Model Experiment
+
+Values are completion %. Exp.=Exploration, Recon=Reconnaissance, VD=Vulnerability Detection, Exploit.=Exploitation.
+
+Open-source gain is calculated from the Average score relative to Opus 4.8: $(\text{model average} - 59.7) / 59.7 \times 100$.
+
+<table style="border-collapse: collapse;">
+<thead>
+<tr>
+<th rowspan="2">Harness</th>
+<th rowspan="2">Model</th>
+<th colspan="4" style="border-left: 2px solid #888;">Easy</th>
+<th colspan="4" style="border-left: 2px solid #888;">Medium</th>
+<th colspan="4" style="border-left: 2px solid #888;">Hard</th>
+<th rowspan="2" style="border-left: 2px solid #888;">Average</th>
+<th rowspan="2">Gain</th>
+</tr>
+<tr>
+<th style="border-left: 2px solid #888;">Exp.</th><th>Recon</th><th>VD</th><th>Exploit.</th>
+<th style="border-left: 2px solid #888;">Exp.</th><th>Recon</th><th>VD</th><th>Exploit.</th>
+<th style="border-left: 2px solid #888;">Exp.</th><th>Recon</th><th>VD</th><th>Exploit.</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>Claude Code</td><td><strong>Opus 4.8</strong></td><td style="border-left: 2px solid #888;"><strong>79.4±6.3</strong></td><td><strong>72.1±8.7</strong></td><td><strong>77.4±4.1</strong></td><td><strong>54.6±13.7</strong></td><td style="border-left: 2px solid #888;"><strong>91.0±1.7</strong></td><td><strong>82.3±8.9</strong></td><td><strong>56.2±9.1</strong></td><td><strong>39.7±12.3</strong></td><td style="border-left: 2px solid #888;"><strong>83.5±1.6</strong></td><td><strong>47.1±3.3</strong></td><td><strong>39.4±2.0</strong></td><td><strong>4.8±1.7</strong></td><td style="border-left: 2px solid #888;"><strong>59.7±3.3</strong></td><td>--</td></tr>
+<tr><td>OpenCode</td><td><strong>GLM 5.3</strong></td><td style="border-left: 2px solid #888;"><strong>95.2±2.5</strong></td><td><strong>85.6±3.1</strong></td><td><strong>84.5±7.4</strong></td><td><strong>63.4±13.7</strong></td><td style="border-left: 2px solid #888;"><strong>91.3±3.7</strong></td><td><strong>76.6±4.3</strong></td><td><strong>49.3±6.7</strong></td><td><strong>35.1±12.0</strong></td><td style="border-left: 2px solid #888;"><strong>88.2±2.8</strong></td><td><strong>52.4±8.8</strong></td><td><strong>44.6±13.3</strong></td><td><strong>15.2±1.5</strong></td><td style="border-left: 2px solid #888;"><strong>63.6±2.8</strong></td><td><strong>+6.5%</strong></td></tr>
+<tr><td>OpenCode</td><td>Nemotron 3 Ultra</td><td style="border-left: 2px solid #888;">91.1±2.2</td><td>67.6±5.4</td><td>65.5±5.5</td><td>48.1±7.6</td><td style="border-left: 2px solid #888;">89.7±0.8</td><td>64.5±1.2</td><td>22.2±4.8</td><td>8.4±4.9</td><td style="border-left: 2px solid #888;">85.3±2.2</td><td>36.0±6.4</td><td>12.2±2.7</td><td>2.8±3.5</td><td style="border-left: 2px solid #888;">49.5±2.1</td><td>-17.1%</td></tr>
+<tr><td>OpenCode</td><td>Mistral Large 4</td><td style="border-left: 2px solid #888;">93.3±1.6</td><td>74.8±11.3</td><td>82.1±6.2</td><td>67.8±10.0</td><td style="border-left: 2px solid #888;">94.1±0.8</td><td>77.3±4.4</td><td>43.8±4.2</td><td>27.0±4.8</td><td style="border-left: 2px solid #888;">91.0±0.6</td><td>54.5±5.1</td><td>34.5±7.2</td><td>10.6±0.0</td><td style="border-left: 2px solid #888;">61.4±2.2</td><td>+2.8%</td></tr>
+<tr><td>OpenCode</td><td>Qwen 3.8 Flash</td><td style="border-left: 2px solid #888;">94.6±1.1</td><td>83.8±5.4</td><td>78.6±7.1</td><td>61.2±7.6</td><td style="border-left: 2px solid #888;">93.7±1.3</td><td>76.6±7.7</td><td>46.5±7.3</td><td>36.8±9.5</td><td style="border-left: 2px solid #888;">89.2±1.9</td><td>46.0±6.9</td><td>37.8±3.6</td><td>13.1±3.2</td><td style="border-left: 2px solid #888;">62.4±3.6</td><td>+4.5%</td></tr>
+</tbody>
+</table>
+
+The results show that GLM 5.3 performs best overall, achieving an average completion rate of 63.6%, which is 6.5% higher than the Opus 4.8 baseline. Qwen 3.8 Flash and Mistral Large 4 also exceed Opus 4.8 by 4.5% and 2.8%, respectively, while Nemotron 3 Ultra is 17.1% lower. The open-source models are strongest during Easy exploration and reconnaissance, but performance declines for all models on the Hard reconnaissance, vulnerability detection, and exploitation phases. Exploitation is the clearest weakness across the table, especially for Opus 4.8 and Nemotron 3 Ultra, whereas GLM 5.3 maintains the strongest overall balance across difficulty levels.
