@@ -2,7 +2,7 @@
 
 A set of containerised, intentionally vulnerable web apps for testing whether AI agents can actually pentest web apps.
 
-## Why this benchmark
+## Motivation
 
 Existing web-app pentesting benchmarks score agents on binary task completion: either the agent fully compromised the target or it didn't. That can't distinguish an agent that found the vulnerability but failed to exploit it from an agent that found nothing at all.
 
