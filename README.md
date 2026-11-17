@@ -2,7 +2,7 @@
 
 A set of containerised, intentionally vulnerable web apps for testing whether AI agents can actually pentest web apps.
 
-## Why this benchmark
+## Motivation
 
 Existing web-app pentesting benchmarks score agents on binary task completion: either the agent fully compromised the target or it didn't. That can't distinguish an agent that found the vulnerability but failed to exploit it from an agent that found nothing at all.
 
@@ -134,7 +134,8 @@ difficulty, with no LLM involved in judging.
 The following results are generated using;
 - Claude Code v2.1.325
 - Codex v0.169.0
-- OpenCode v2.2.7 
+- OpenCode v2.2.7
+- Strix v1.7.1 
 
 **Overall ranking.** Average = overall score across all tiers (mean %, ± std as a fraction, over three runs). Each bar block = 5%.
 
